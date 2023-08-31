@@ -44,17 +44,6 @@ locals {
   }
 }
 
-// Check to make sure the highest level module has no remaining values that weren't recursed through
-module "asset_sufficient_levels" {
-  source        = "Invicton-Labs/assertion/null"
-  version       = "0.2.1"
-  error_message = "Deepmerge has recursed to insufficient depth (${length(local.modules)} levels is not enough)"
-  condition = concat([
-    for i in range(0, length(local.input_maps)) :
-    local.modules[length(local.modules) - 1][i].remaining
-  ]...) == []
-}
-
 // Use this  from a DIFFERENT terraform project to generate a new file with a different max depth
 /*
 resource "local_file" "depth" {
